@@ -4,6 +4,9 @@ AYATANA_DEB="https://raw.githubusercontent.com/Lafydev/wingpanel-indicator-ayata
 NVM_INSTALL_SH="https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh"
 OPENJDK_TAR_GZ="https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde534da945d746/7/GPL/openjdk-16.0.2_linux-x64_bin.tar.gz"
 PYTHON_VERSION="3.9.6"
+JETBRAINS_MONO_ZIP="https://download-cdn.jetbrains.com/fonts/JetBrainsMono-2.242.zip"
+INSTALL_TL_TAR_GZ="https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
+TEXLIVE_ADDITIONAL_PACKAGES="adjustbox arabxetex awesomebox biblatex bidi-atbegshi bidicontour bidipagegrid bidipresentation bidishadowtext businesscard-qrcode catchfile changepage cleveref collectbox collectbox cqubeamer datetime enumitem environ fixlatvian fmtcount fontbook fontwrap forloop framed fvextra ifmtarg interchar latexmk lipsum logreq minted mwe na-position pagecolor pgfplots philokalia ptext realscripts simple-resume-cv simple-thesis-dissertation tcolorbox tetragonos tikz-cd titlesec trimspaces ucharclasses ulem unicode-bidi unisugar upquote varwidth xevlna xifthen xpatch xstring"
 
 # Text colors
 RED=`tput setaf 1`
@@ -52,6 +55,15 @@ rm com.github.lafydev.wingpanel.deb
 mkdir -p ~/.config/autostart
 cp /etc/xdg/autostart/indicator-application.desktop ~/.config/autostart/
 sed -i 's/^OnlyShowIn.*/OnlyShowIn=Unity;GNOME;Pantheon;/' ~/.config/autostart/indicator-application.desktop
+
+# Install JetBrains Mono
+echo "${BLUE}Install ${BOLD}JetBrains Mono${RESET}"
+curl $JETBRAINS_MONO_ZIP -o jetbrains_mono.zip
+unzip jetbrains_mono.zip -d jetbrains_mono
+mv jetbrains_mono/fonts/ttf/* $HOME/.local/share/fonts
+rm -r jetbrains_mono
+rm jetbrains_mono.zip
+echo "${GREEN}${BOLD}JetBrains Mono${RESET}${GREEN} is installed.${RESET}"
 
 # Install ibus
 echo "${BLUE}Install ${BOLD}ibus${RESET}"
@@ -149,4 +161,15 @@ source $HOME/.ghcup/env
 echo "${GREEN}${BOLD}$(cargo --version)${RESET}${GREEN} is installed.${RESET}"
 
 # Install TeX
+wget -O install-tl.tar.gz $INSTALL_TL_TAR_GZ
+mv $(echo install-tl-*) install-tl
+pushd install-tl
+cp ../texlive.profile texlive.profile
+sed -i 's@$HOME@'"$HOME"'@g' texlive.profile
+sudo ./install-tl --profile=texlive.profile
+eval "sudo chown -R $(whoami):$(id -gn) $HOME/.texlive"
+eval "tlmgr install $TEXLIVE_ADDITIONAL_PACKAGES"
+popd
+rm -rf install-tl*
+echo "${GREEN}${BOLD}$(tlmgr --version | sed -n 3p)${RESET}${GREEN} is installed.${RESET}"
 
