@@ -6,7 +6,7 @@ OPENJDK_TAR_GZ="https://download.java.net/java/GA/jdk16.0.2/d4a915d82b4c4fbb9bde
 PYTHON_VERSION="3.9.6"
 JETBRAINS_MONO_ZIP="https://download-cdn.jetbrains.com/fonts/JetBrainsMono-2.242.zip"
 INSTALL_TL_TAR_GZ="https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz"
-TEXLIVE_ADDITIONAL_PACKAGES="adjustbox arabxetex awesomebox biblatex bidi-atbegshi bidicontour bidipagegrid bidipresentation bidishadowtext businesscard-qrcode catchfile changepage cleveref collectbox collectbox cqubeamer datetime enumitem environ fixlatvian fmtcount fontbook fontwrap forloop framed fvextra ifmtarg interchar latexmk lipsum logreq minted mwe na-position pagecolor pgfplots philokalia ptext realscripts simple-resume-cv simple-thesis-dissertation tcolorbox tetragonos tikz-cd titlesec trimspaces ucharclasses ulem unicode-bidi unisugar upquote varwidth xevlna xifthen xpatch xstring"
+TEXLIVE_ADDITIONAL_PACKAGES="adjustbox arabxetex awesomebox biblatex bidi-atbegshi bidicontour bidipagegrid bidipresentation bidishadowtext businesscard-qrcode catchfile changepage cleveref collectbox collectbox cqubeamer datetime enumitem environ fixlatvian fmtcount fontbook fontwrap forloop framed fvextra ifmtarg interchar latexindent latexmk lipsum logreq minted mwe na-position pagecolor pgfplots philokalia ptext realscripts simple-resume-cv simple-thesis-dissertation tcolorbox tetragonos tikz-cd titlesec trimspaces ucharclasses ulem unicode-bidi unisugar upquote varwidth xevlna xifthen xpatch xstring"
 
 # Text colors
 RED=`tput setaf 1`
@@ -171,5 +171,6 @@ eval "sudo chown -R $(whoami):$(id -gn) $HOME/.texlive"
 eval "tlmgr install $TEXLIVE_ADDITIONAL_PACKAGES"
 popd
 rm -rf install-tl*
+sudo cpan Unicode::GCString File::HomeDir # for latexindent
 echo "${GREEN}${BOLD}$(tlmgr --version | sed -n 3p)${RESET}${GREEN} is installed.${RESET}"
 
