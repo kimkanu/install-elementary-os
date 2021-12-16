@@ -75,6 +75,7 @@ sed -i 's/^OnlyShowIn.*/OnlyShowIn=Unity;GNOME;Pantheon;/' ~/.config/autostart/i
 echo "${BLUE}Install ${BOLD}JetBrains Mono${RESET}"
 curl $JETBRAINS_MONO_ZIP -o jetbrains_mono.zip
 unzip jetbrains_mono.zip -d jetbrains_mono
+mkdir -p $HOME/.local/share/fonts
 mv jetbrains_mono/fonts/ttf/* $HOME/.local/share/fonts
 rm -r jetbrains_mono
 rm jetbrains_mono.zip
@@ -171,7 +172,8 @@ echo "${GREEN}${BOLD}$(cargo --version)${RESET}${GREEN} is installed.${RESET}"
 
 # Install TeX
 wget -O install-tl.tar.gz $INSTALL_TL_TAR_GZ
-mv $(echo install-tl-*) install-tl
+tar -zxvf install-tl.tar.gz
+mv install-tl-* install-tl
 pushd install-tl
 cp ../texlive.profile texlive.profile
 sed -i 's@$HOME@'"$HOME"'@g' texlive.profile
