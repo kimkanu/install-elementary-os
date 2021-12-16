@@ -1,3 +1,5 @@
+#! /bin/bash
+
 # Configurable constants
 TIMEZONE="Asia/Seoul"
 AYATANA_DEB="https://raw.githubusercontent.com/Lafydev/wingpanel-indicator-ayatana/master/com.github.lafydev.wingpanel-indicator-ayatana_2.0.7_odin.deb"
@@ -18,9 +20,7 @@ CYAN=`tput setaf 6`
 BOLD=`tput bold`
 RESET=`tput sgr0`
 
-# Enter sudo password in advance
-sudo su
-exit
+echo -e "\nsource ~/.bash_aliases" >> ~/.bashrc
 
 # Set the timezone to Asia/Seoul
 echo "${BLUE}Set the timezone to Asia/Seoul${RESET}"
@@ -37,7 +37,13 @@ sudo apt -y install \
     g++ gcc libgmp3-dev libncurses5-dev manpages-fr-extra xz-utils \
     libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev \
     xz-utils tk-dev libffi-dev liblzma-dev python-openssl \
-    libglib2.0-dev libgranite-dev libindicator3-dev libwingpanel-dev indicator-application
+    libglib2.0-dev libgranite-dev libindicator3-dev libwingpanel-dev indicator-application software-properties-common
+
+# Set git config
+echo "${BLUE}Set git config${RESET}"
+git config --global user.email "me@kanu.kim"
+git config --global user.name "Keonwoo Kim"
+echo -e "[alias]\n\ttree = log --graph --decorate --pretty=oneline --abbrev-commit" >> ~/.gitconfig
 
 # Add flathub repository
 echo "${BLUE}Add flathub repository${RESET}"
@@ -45,7 +51,16 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 
 # Install Firefox
 echo "${BLUE}Install ${BOLD}Firefox${RESET}"
-flatpak install -y flathub org.mozilla.firefox
+sudo add-apt-repository ppa:ubuntu-mozilla-security/ppa -y
+sudo apt install firefox
+
+# Install VS Codium
+echo "${BLUE}Install ${BOLD}VS Codium${RESET}"
+wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
+echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
+sudo apt update && sudo apt install codium
+echo -e "alias code='codium'" >> ~/.bash_aliases
+source ~/.bash_aliases
 
 # Install Wingpanel Ayatana-Compatibility Indicator
 echo "${BLUE}Install ${BOLD}Wingpanel Ayatana-Compatibility Indicator${RESET}"
@@ -71,12 +86,6 @@ echo -e "\nexport GTK_IM_MODULE=ibus\nexport XMODIFIERS=@im=ibus\nexport QT_IM_M
 sudo apt -y install ibus ibus-hangul ibus-anthy
 im-config -n ibus
 echo "${GREEN}${BOLD}$(ibus version)${RESET}${GREEN} is installed. Please set input methods manually using \`ibus-setup'.${RESET}"
-
-# Install Visual Studio Code
-echo "${BLUE}Install ${BOLD}Visual Studio Code${RESET}"
-flatpak install -y flathub com.visualstudio.code
-echo -e "\nalias code=\"/var/lib/flatpak/exports/bin/com.visualstudio.code\"" >> .bashrc
-echo "${GREEN}${BOLD}Visual Studio Code $(code --version | head -n 1)${RESET}${GREEN} is installed.${RESET}"
 
 # Install WPS Office
 echo "${BLUE}Install ${BOLD}WPS Office${RESET}"
@@ -136,9 +145,9 @@ echo "${GREEN}${BOLD}OpenJDK $(java -version 2>&1 | head -n 1 | awk -F '"' '{pri
 # Install pyenv
 echo "${BLUE}Install ${BOLD}pyenv${RESET}"
 curl https://pyenv.run | bash
-echo -e "\nexport PATH=\"\$HOME/.pyenv/bin:\$HOME/.pyenv/shims:\$PATH\"" >> .bashrc
-echo -e "eval \"\$(pyenv init -)\"" >> .bashrc
-echo -e "eval \"\$(pyenv virtualenv-init -)\"" >> .bashrc
+echo -e "\nexport PATH=\"\$HOME/.pyenv/bin:\$HOME/.pyenv/shims:\$PATH\"" >> ~/.bashrc
+echo -e "eval \"\$(pyenv init -)\"" >> ~/.bashrc
+echo -e "eval \"\$(pyenv virtualenv-init -)\"" >> ~/.bashrc
 . ~/.bashrc
 echo "${GREEN}${BOLD}$(pyenv --version)${RESET}${GREEN} is installed.${RESET}"
 
