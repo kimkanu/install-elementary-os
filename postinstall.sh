@@ -20,7 +20,7 @@ CYAN=`tput setaf 6`
 BOLD=`tput bold`
 RESET=`tput sgr0`
 
-echo -e "\nsource ~/.bash_aliases" >> ~/.bashrc
+echo -e "\nexport PATH=\"$HOME/.local/bin:$PATH\"" >> ~/.bashrc
 
 # Set the timezone to Asia/Seoul
 echo "${BLUE}Set the timezone to Asia/Seoul${RESET}"
